@@ -8,7 +8,14 @@ Docker Compose v2.5.0
 
 ## Setup instructions
 
-This service uses Keycloak with a PostgreSQL database for user management. Spin up the containers using
+Building the React auth-app image and run containers simultaneously.
+
+    docker-compose up -d --build
+
+The react app can be reached using.
+
+    localhost:3000
+This service uses Keycloak with a PostgreSQL database for user management and react app for testing. Spin up the containers using
 
     docker compose up
 
@@ -19,6 +26,7 @@ To run the production configuration, run
 The Keycloak admin console should then be reachable at
 
     localhost:8080
+
 
 ## Files
 
