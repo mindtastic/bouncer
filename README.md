@@ -3,7 +3,7 @@ The authentication service for mindtastic
 
 ## Requirements
 
-Docker 20.10.14
+Docker 20.10.14  
 Docker Compose v2.5.0
 
 ## Setup instructions
@@ -18,11 +18,11 @@ To run the production configuration, run
 
 ## Files
 
-**Base configuration:**
+**Base configuration:**  
 docker-compose.yml
 
-**Overrides for dev and testing configuration** (applied by default)
+**Overrides for dev and testing configuration** (applied by default):  
 docker-compose.override.yml
 
-**Overrides for production configuration**
+**Overrides for production configuration:**  
 docker-compose.prod.yml
