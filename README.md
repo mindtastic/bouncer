@@ -16,6 +16,10 @@ To run the production configuration, run
 
     docker compose -f docker-compose.prod.yml up
 
+The Keycloak admin console should then be reachable at
+
+    localhost:8080
+
 ## Files
 
 **Base configuration:**  
@@ -26,3 +30,7 @@ docker-compose.override.yml
 
 **Overrides for production configuration:**  
 docker-compose.prod.yml
+
+## REST Endpoints
+
+Documentation of built-in endpoints to communicate with Keycloak via REST API can be found in the api folder.
