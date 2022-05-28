@@ -8,29 +8,22 @@ Docker Compose v2.5.0
 
 ## Setup instructions
 
-This service uses Keycloak with a PostgreSQL database for user management. Spin up the containers using
+In production, this service uses Ory Kratos with a PostgreSQL database for user management.  
+  
+For local testing, you can use the standard package of Kratos with SQLite:
 
-    docker compose up
+    docker compose -f quickstart.yml up --build
 
-To run the production configuration, run
+The Kratos public API will be reachable at
 
-    docker compose -f docker-compose.prod.yml up
+    localhost:4433
 
-The Keycloak admin console should then be reachable at
+With the admin endpoint at
 
-    localhost:8080
+    localhost:4434
 
-## Files
+## Configuration
 
-**Base configuration:**  
-docker-compose.yml
+The Kratos configuration file can be found in /config/kratos.yml.
 
-**Overrides for dev and testing configuration** (applied by default):  
-docker-compose.override.yml
-
-**Overrides for production configuration:**  
-docker-compose.prod.yml
-
-## REST Endpoints
-
-Documentation of built-in endpoints to communicate with Keycloak via REST API can be found in the api folder.
+*Note:* The config file **must** be named kratos.yml.
