@@ -12,7 +12,7 @@ In production, this service uses Ory Kratos with a PostgreSQL database for user 
   
 For local testing, you can use the standard package of Kratos with SQLite:
 
-    docker compose -f quickstart.yml up --build
+    docker compose -f quickstart.yml up --build -d
 
 The Kratos public API will be reachable at
 
