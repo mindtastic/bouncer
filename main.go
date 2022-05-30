@@ -17,6 +17,7 @@ import (
 
 var downstream = flag.String("downstream", "", "downstream Ory Kratos cluster")
 var address = flag.String("addr", ":7666", "address to listen on")
+var logging = flag.Bool("log", false, "enable logging of requests")
 
 func main() {
 	flag.Parse()
@@ -36,7 +37,7 @@ func main() {
 
 	mux := http.ServeMux{}
 	mux.Handle("/", handleEverythingElse(*downstreamURL))
-	mux.Handle("/self-service/registration", handleEverythingElse(*downstreamURL))
+	//mux.Handle("/self-service/registration", handleEverythingElse(*downstreamURL))
 	mux.Handle("/self-service/registration/", handleRegistration(*downstreamURL))
 
 	proxy := &http.Server{
@@ -84,6 +85,9 @@ func handleRegistration(url url.URL) *httputil.ReverseProxy {
 			}
 			req.Body = ioutil.NopCloser(b)
 			req.ContentLength = int64(b.Len())
+			if *logging {
+				log.Printf("proxied call to %q", req.URL.Path)
+			}
 		},
 	}
 	return proxy
@@ -94,6 +98,9 @@ func handleEverythingElse(url url.URL) http.Handler {
 		Director: func(req *http.Request) {
 			req.URL.Host = url.Host
 			req.URL.Scheme = url.Scheme
+			if *logging {
+				log.Printf("proxied call to %q", req.URL.Path)
+			}
 		},
 	}
 	return proxy
