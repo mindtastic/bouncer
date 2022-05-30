@@ -86,7 +86,7 @@ func handleRegistration(url url.URL) *httputil.ReverseProxy {
 			req.Body = ioutil.NopCloser(b)
 			req.ContentLength = int64(b.Len())
 			if *logging {
-				log.Printf("proxied call to %q", req.URL.Path)
+				log.Printf("proxied registration call to %q", req.URL.Path)
 			}
 		},
 	}
@@ -99,7 +99,7 @@ func handleEverythingElse(url url.URL) http.Handler {
 			req.URL.Host = url.Host
 			req.URL.Scheme = url.Scheme
 			if *logging {
-				log.Printf("proxied call to %q", req.URL.Path)
+				log.Printf("proxied other call to %q", req.URL.Path)
 			}
 		},
 	}
