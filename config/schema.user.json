@@ -6,9 +6,8 @@
         "traits": {
             "type": "object",
             "properties": {
-                "email": {
+                "accountKey": {
                     "type": "string",
-                    "format": "email",
                     "ory.sh/kratos": {
                         "credentials": {
                             "password": {
@@ -19,7 +18,7 @@
                 }
             },
             "required": [
-                "email"
+                "accountKey"
             ]
         }
     },
