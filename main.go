@@ -36,6 +36,7 @@ func main() {
 
 	mux := http.ServeMux{}
 	mux.Handle("/", handleEverythingElse(*downstreamURL))
+	mux.Handle("/self-service/registration", handleEverythingElse(*downstreamURL))
 	mux.Handle("/self-service/registration/", handleRegistration(*downstreamURL))
 
 	proxy := &http.Server{
