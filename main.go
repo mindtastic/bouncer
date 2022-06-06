@@ -36,6 +36,7 @@ func main() {
 	}
 
 	mux := http.ServeMux{}
+	mux.Handle("/health", handleHealthCheck())
 	mux.Handle("/", handleEverythingElse(*downstreamURL))
 	mux.Handle("/self-service/registration", handleRegistration(*downstreamURL))
 	mux.Handle("/self-service/registration/", handleRegistration(*downstreamURL))
@@ -49,6 +50,12 @@ func main() {
 	}
 	log.Println("listening on port", *address)
 	log.Fatal(proxy.ListenAndServe())
+}
+
+func handleHealthCheck() http.HandlerFunc {
+	return func(writer http.ResponseWriter, request *http.Request) {
+		writer.WriteHeader(http.StatusOK)
+	}
 }
 
 func handleRegistration(url url.URL) *httputil.ReverseProxy {
