@@ -6,13 +6,14 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	uuid "github.com/hashicorp/go-uuid"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
 	"time"
+
+	uuid "github.com/hashicorp/go-uuid"
 )
 
 var downstream = flag.String("downstream", "", "downstream Ory Kratos cluster")
@@ -38,8 +39,8 @@ func main() {
 	mux := http.ServeMux{}
 	mux.Handle("/health", handleHealthCheck())
 	mux.Handle("/", handleEverythingElse(*downstreamURL))
-	mux.Handle("/self-service/registration", handleRegistration(*downstreamURL))
-	mux.Handle("/self-service/registration/", handleRegistration(*downstreamURL))
+	mux.Handle("/self-service/registration", sanitizeRequest(handleRegistration(*downstreamURL)))
+	mux.Handle("/self-service/registration/", sanitizeRequest(handleRegistration(*downstreamURL)))
 
 	proxy := &http.Server{
 		Addr:           *address,
@@ -111,4 +112,26 @@ func handleEverythingElse(url url.URL) http.Handler {
 		},
 	}
 	return proxy
+}
+
+// sanitize Request is a http middleware, preprocessing the request for our needs
+// It
+//  * Sets the Content-Type to application/json if not provided.
+//	* If the http request body is empty, it gets replace by an empty json object.
+func sanitizeRequest(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Header.Get("Content-Type") == "" {
+			r.Header.Set("Content-Type", "application/json")
+		}
+
+		if r.ContentLength == 0 {
+			// Empty json body
+			emptyJson := bytes.NewBufferString("{}")
+
+			r.Body = ioutil.NopCloser(bytes.NewReader(emptyJson.Bytes()))
+			r.ContentLength = int64(emptyJson.Len())
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }
