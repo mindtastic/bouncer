@@ -20,6 +20,8 @@ var downstream = flag.String("downstream", "", "downstream Ory Kratos cluster")
 var address = flag.String("addr", ":7666", "address to listen on")
 var logging = flag.Bool("log", false, "enable logging of requests")
 
+const defaultAuthMethod = "password"
+
 func main() {
 	flag.Parse()
 
@@ -66,6 +68,7 @@ func handleRegistration(url url.URL) *httputil.ReverseProxy {
 		Traits   struct {
 			AccountKey string `json:"accountKey"`
 		} `json:"traits"`
+		CSRF string `json:"csrf_token,omitempty"`
 	}
 
 	proxy := &httputil.ReverseProxy{
@@ -82,6 +85,9 @@ func handleRegistration(url url.URL) *httputil.ReverseProxy {
 			if err := d.Decode(body); err != nil {
 				log.Printf("error decoding request body: %v", err)
 				return
+			}
+			if body.Method == "" {
+				body.Method = defaultAuthMethod
 			}
 			body.Traits.AccountKey = stamp
 			body.Password = fmt.Sprintf("%x", md5.Sum([]byte(stamp)))
