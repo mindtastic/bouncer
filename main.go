@@ -130,6 +130,10 @@ func sanitizeRequest(next http.Handler) http.Handler {
 			r.Header.Set("Content-Type", "application/json")
 		}
 
+		if r.Header.Get("Accept") == "" {
+			r.Header.Set("Accept", "application/json")
+		}
+
 		if r.ContentLength == 0 {
 			// Empty json body
 			emptyJson := bytes.NewBufferString("{}")
